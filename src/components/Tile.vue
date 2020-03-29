@@ -22,13 +22,11 @@ export default {
   props: {
       initialWord: {
           type: Object,
-          // default: {}
       },
   },
   methods: {
     goToPage() {
       const {id} = this.word;
-      console.log(`going to thoughtfulmoose.com/word/${id}`)
       this.$router.push({ name: 'Word', params: { id: id } })
     }
   },

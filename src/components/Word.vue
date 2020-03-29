@@ -12,8 +12,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '../services/api'
 import _ from 'lodash'
+
 const cloneInitialWord = (word) => {
       const clonedWord = {
         name: word.name,
@@ -51,7 +52,7 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.id;
-    const word = await axios.get(`http://localhost:3000/words/${id}`);
+    const word = await api.getWord(id);
     this.word = word.data;
     this.editedWord = cloneInitialWord(word.data);
   },

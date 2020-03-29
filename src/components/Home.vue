@@ -10,12 +10,7 @@
 
 <script>
 import Tile from './Tile'
-import axios from 'axios'
-
-const getWords = async () => {
-    const words = await axios.get('http://localhost:3000/words')
-    return words.data;
-}
+import api from '../services/api'
 
 export default {
   name: 'Home',
@@ -29,7 +24,8 @@ export default {
     }
   },
   async mounted() {
-      this.words = await getWords();
+    const words = await api.getWords();
+    this.words = words.data
   }
 }
 </script>
