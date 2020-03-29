@@ -1,13 +1,13 @@
 <template>
     <div>
       <div>{{word.name}}</div>
-      <div v-for="(def, i) in word.definition" v-bind:key="def-i">
+      <div v-for="(def, i) in word.definition" v-bind:key="'definition' + i">
         {{def.partOfSpeech}}
-        <div v-for="(entry, eI) in def.entries" :key="def-i-entry-eI">
-          <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:input="checkIfEdited"/>
+        <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI">
+          <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="checkIfEdited"/>
         </div>
       </div>
-      isWordEdited: {{isWordEdited}}
+    <button v-if="isWordEdited">UPDATE</button>
     </div>
 </template>
 
@@ -54,13 +54,10 @@ export default {
     const word = await axios.get(`http://localhost:3000/words/${id}`);
     this.word = word.data;
     this.editedWord = cloneInitialWord(word.data);
-    // console.log(cloneInitialWord)
-    // console.log(_.isEqual(this.word, this.editedWord))
   },
   methods: {
     checkIfEdited() {
-      console.log('checking');
-      this.isWordEdited = _.isEqual(this.word, this.editedWord);
+      this.isWordEdited = !_.isEqual(this.word, this.editedWord);
     }
   }
     
