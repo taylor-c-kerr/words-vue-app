@@ -1,16 +1,17 @@
 <template>
-    <div class="tile">
-        <div class="name">{{name}}</div>
-        <div v-for="(def, index) in definition" v-bind:key="def-index">
-          <div>{{def.partOfSpeech}}</div>
+    <div class="tile" v-on:click="goToPage">
+        <div class="name">{{word.name}}</div>
+        <div v-for="(def, index) in word.definition" v-bind:key="word.def-index">
+          <div class="partOfSpeech">{{def.partOfSpeech}}</div>
           <div
             v-for="(entry, eIndex) in def.entries"
             v-bind:key="def-index-entry-eIndex"
             class="entry"
           >
-            {{entry}}
+            {{eIndex + 1}}. {{entry}}
           </div>
         </div>
+        <button>Delete</button>
     </div>
 </template>
 
@@ -19,25 +20,26 @@
 export default {
   name: 'Tile',
   props: {
-      name: {
-          type: String,
-          default: ''
+      initialWord: {
+          type: Object,
+          // default: {}
       },
-      definition: {
-          type: Array,
-        //   default: []
-      },
-      id: {
-          type: String,
-          default: ''
-      },
-      category: {
-          type: Array,
-        //   default: []
-      }
   },
-  components: {
+  methods: {
+    goToPage() {
+      const {id} = this.word;
+      console.log(`going to thoughtfulmoose.com/word/${id}`)
+      this.$router.push({ name: 'Word', params: { id: id } })
+    }
   },
+  data() {
+    return {
+      word: {}
+    }
+  },
+  mounted() {
+    this.word = this.initialWord;
+  }
 }
 </script>
 

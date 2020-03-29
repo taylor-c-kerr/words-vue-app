@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <div v-for="word in words" v-bind:key="word.id">
-        <Tile
-            v-bind:name="word.name"
-            v-bind:definition="word.definition"
-            v-bind:id="word.id"
-            v-bind:category="word.category"
-        />
-        
-    </div>
+  <div class="words-container">
+      <Tile
+        v-for="word in words"
+        v-bind:key="word.id"
+        v-bind:initialWord="word"
+      />
   </div>
 </template>
 
@@ -38,5 +34,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  .cell {
+    color: red;
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 50px;
+}
+
+  .words-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
 </style>
