@@ -1,5 +1,7 @@
 <template>
-    <div class="tile" v-on:click="goToPage">
+    <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
+    <!-- <div class="deleted"> -->
+      <div class="definition" v-on:click="goToPage">
         <div class="name">{{word.name}}</div>
         <div v-for="(def, index) in word.definition" v-bind:key="word.def-index">
           <div class="partOfSpeech">{{def.partOfSpeech}}</div>
@@ -11,11 +13,13 @@
             {{eIndex + 1}}. {{entry}}
           </div>
         </div>
-        <button>Delete</button>
+      </div>
+      <button v-on:click="onDelete">Delete</button>
     </div>
 </template>
 
 <script>
+import api from '../services/api'
 
 export default {
   name: 'Tile',
@@ -28,11 +32,21 @@ export default {
     goToPage() {
       const {id} = this.word;
       this.$router.push({ name: 'Word', params: { id: id } })
+    },
+    async onDelete() {
+      const { name,id } = this.word;
+      const confirm = window.confirm(`are you sure you want to delete ${name}?`);
+      console.log(confirm)
+      if (confirm) {
+        await api.deleteWord(id);
+        this.isDeleted = true;
+      }
     }
   },
   data() {
     return {
-      word: {}
+      word: {},
+      isDeleted: false,
     }
   },
   mounted() {
@@ -72,7 +86,7 @@ export default {
     }
   }
 
-  .deletedTile {
+  .deleted {
     border: solid;
     border-color: red;
     border-radius: 30px;

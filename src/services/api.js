@@ -10,7 +10,7 @@ export default {
     },
 
     deleteWord(id) {
-        return axios.get(`http://localhost:3000/words/${id}`)
+        return axios.delete(`http://localhost:3000/words/${id}`)
     },
 
     updateWord(word) {
