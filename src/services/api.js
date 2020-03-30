@@ -13,9 +13,9 @@ export default {
         return axios.get(`http://localhost:3000/words/${id}`)
     },
 
-    // updateWord(word) {
-    //     // 
-    // },
+    updateWord(word) {
+        return axios.put(`http://localhost:3000/words/${word.id}`, word)
+    },
 
     // addWord(word) {
 

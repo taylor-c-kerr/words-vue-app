@@ -7,13 +7,14 @@
           <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="checkIfEdited"/>
         </div>
       </div>
-    <button v-if="isWordEdited">UPDATE</button>
+    <button v-if="isWordEdited" v-on:click="handleSubmit">UPDATE</button>
     </div>
 </template>
 
 <script>
 import api from '../services/api'
 import _ from 'lodash'
+import validate from '../services/validate'
 
 const cloneInitialWord = (word) => {
       const clonedWord = {
@@ -59,7 +60,11 @@ export default {
   methods: {
     checkIfEdited() {
       this.isWordEdited = !_.isEqual(this.word, this.editedWord);
-    }
+    },
+    async handleSubmit() {
+      let validatedWord = validate.word(this.editedWord);
+      await api.updateWord(validatedWord);
+    },
   }
     
 }
