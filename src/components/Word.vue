@@ -8,6 +8,7 @@
         </div>
       </div>
     <button v-if="isWordEdited" v-on:click="handleSubmit">UPDATE</button>
+    <div v-if="!word.name">ADDING WORD</div>
     </div>
 </template>
 
@@ -53,6 +54,7 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.id;
+    console.log(this.$route.params)
     const word = await api.getWord(id);
     this.word = word.data;
     this.editedWord = cloneInitialWord(word.data);

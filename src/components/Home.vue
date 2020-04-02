@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      words: []
+      words: [],
     }
   },
   async mounted() {

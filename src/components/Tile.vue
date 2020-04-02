@@ -1,6 +1,5 @@
 <template>
     <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
-    <!-- <div class="deleted"> -->
       <div class="definition" v-on:click="goToPage">
         <div class="name">{{word.name}}</div>
         <div v-for="(def, index) in word.definition" v-bind:key="word.def-index">
@@ -36,7 +35,6 @@ export default {
     async onDelete() {
       const { name,id } = this.word;
       const confirm = window.confirm(`are you sure you want to delete ${name}?`);
-      console.log(confirm)
       if (confirm) {
         await api.deleteWord(id);
         this.isDeleted = true;

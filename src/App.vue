@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      | <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link>
+      <div><router-link to="/word">Add Word</router-link></div>
     </div>
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,6 +19,8 @@
 
 #nav {
   padding: 30px;
+  display: flex;
+  flex-direction: column;
 
   a {
     font-weight: bold;
