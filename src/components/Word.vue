@@ -1,41 +1,47 @@
 <template>
     <div>
-      <div>
+      <div class="word-name">
         <div v-if="!isAddingWord">{{editedWord.name}}</div>
         <div v-if="isAddingWord">Enter a new word:</div>
         <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:change="checkIfEdited"/>
       </div>
 
-      <div v-for="(def, i) in editedWord.definition" v-bind:key="'definition' + i">
-        <div v-if="!isAddingWord && !isNewDefinition(i)">
-          {{editedWord.definition[i].partOfSpeech}}
+      <div v-for="(def, i) in editedWord.definition" v-bind:key="'definition' + i" class="word-definition">
+        <div class="definition-pos">
+          <div v-if="!isAddingWord && !isNewDefinition(i)">
+            {{editedWord.definition[i].partOfSpeech}}
+          </div>
+
+          <div v-if="isNewDefinition(i)">
+            <div>Choose a part of Speech</div>
+            <select v-on:change="handlePartOfSpeechChange($event, i)" v-model="editedWord.definition[i].partOfSpeech">
+              <option value="">--</option>
+              <option v-for="(pos, index) in availablePartsOfSpeech" v-bind:value="pos" v-bind:key="pos + '-' + index">
+                {{ pos }}
+              </option>
+            </select>
+          </div>
         </div>
 
-        <div v-if="isNewDefinition(i)">
-          <div>Choose a part of Speech</div>
-          <select v-on:change="handlePartOfSpeechChange($event, i)" v-model="editedWord.definition[i].partOfSpeech">
-            <option value="">--</option>
-            <option v-for="(pos, index) in availablePartsOfSpeech" v-bind:value="pos" v-bind:key="pos + '-' + index">
-              {{ pos }}
-            </option>
-          </select>
-        </div>
         
-        <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI">
-          <div>{{eI + 1}}. <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="checkIfEdited" placeholder="Enter a new entry"/></div>
+        <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI" class="definition-entries">
+          <div class="entry">
+            {{eI + 1}}. <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="checkIfEdited" placeholder="Enter a new entry"/>
+          </div>
         </div>
 
-        <button @click="addEntry($event, i)">New Entry</button>
+        <button class="button-add-entry" @click="addEntry($event, i)">New Entry</button>
       </div>
 
       <div>
-        <button @click="addPartOfSpeech">Add Part of Speech</button>
+        <button class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
       </div>
 
       <div>
-        <button v-if="isWordEdited && !isAddingWord" @click="handleSubmit">UPDATE</button>
-        <button v-if="isWordEdited && isAddingWord" @click="handleSubmit">ADD</button>
+        <button class="button-update" v-if="isWordEdited && !isAddingWord" @click="handleSubmit">UPDATE</button>
+        <button class="button-add" v-if="isWordEdited && isAddingWord" @click="handleSubmit">ADD</button>
       </div>
+
     </div>
 </template>
 
@@ -74,6 +80,8 @@ export default {
   props: {},
   data() {
     return {
+      isLoading: true,
+      isError: false,
       word: {},
       isWordEdited: false,
       editedWord: {},
@@ -91,6 +99,7 @@ export default {
       this.word = word.data;
       this.editedWord = cloneInitialWord(word.data);
     }
+    this.isLoading = false;
   },
   watch: {
     availablePartsOfSpeech: function (oldVal, newVal) {
@@ -102,12 +111,17 @@ export default {
       this.isWordEdited = !_.isEqual(this.word, this.editedWord);
     },
     async handleSubmit() {
-      let validatedWord = validate.word(this.editedWord);
-      if (this.isAddingWord) {
-        await api.addWord(validatedWord)
+      try {
+        let validatedWord = validate.word(this.editedWord);
+        if (this.isAddingWord) {
+          await api.addWord(validatedWord)
+        }
+        else {
+          await api.updateWord(validatedWord);
+        }
       }
-      else {
-        await api.updateWord(validatedWord);
+      catch (error) {
+        alert('There was an error submitting.  Please make sure all fields are filled.')
       }
     },
     initNewWord() {
