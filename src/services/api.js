@@ -17,7 +17,7 @@ export default {
         return axios.put(`http://localhost:3000/words/${word.id}`, word)
     },
 
-    // addWord(word) {
-
-    // }
+    addWord(word) {
+        return axios.post('http://localhost:3000/words', word)
+    }
 }
