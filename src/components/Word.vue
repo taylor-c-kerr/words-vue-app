@@ -30,7 +30,7 @@
       </div>
 
       <div>
-        <button v-if="availablePartsOfSpeech.length" class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
+        <button v-if="canAddPos" class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
       </div>
 
       <div>
@@ -89,12 +89,18 @@ export default {
     }
   },
   computed: {
+    usedPartsOfSpeech: function() {
+      if (!this.editedWord) {
+        return
+      }
+      return this.editedWord.definition.map(def => def.partOfSpeech).filter(def => def !== '')
+    },
     availablePartsOfSpeech: function() {
       const partsOfSpeech = ['noun', 'verb', 'adjective', 'adverb', 'preposition'];
       return _.difference(partsOfSpeech, this.usedPartsOfSpeech);
     },
-    usedPartsOfSpeech: function() {
-      return this.editedWord.definition.map(def => def.partOfSpeech).filter(def => def !== '')
+    canAddPos: function() {
+      return this.availablePartsOfSpeech.length && this.editedWord.definition.length === 5;
     }
   },
   async mounted() {
@@ -151,13 +157,20 @@ export default {
     isNewDefinition(index) {
       const initialDef = this.word.definition[index]
       const editedDef = this.editedWord.definition[index]
-      if (!initialDef) return true;
+      if (!initialDef) {
+        return true
+      }
 
       const noEntries = initialDef.entries.filter(entry => entry.trim() !== '');
-      if (!noEntries.length) return true;
+      if (!noEntries.length) {
+        return true
+      }
 
       const editedWordNoEntries = editedDef.entries.filter(entry => entry.trim() !== '');
-      if (!editedWordNoEntries.length) return true;
+      if (!editedWordNoEntries.length) {
+        editedDef.partOfSpeech = ''
+        return true
+      }
     },
   }
     
