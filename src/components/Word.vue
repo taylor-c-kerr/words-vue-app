@@ -3,30 +3,26 @@
       <div class="word-name">
         <div v-if="!isAddingWord">{{editedWord.name}}</div>
         <div v-if="isAddingWord">Enter a new word:</div>
-        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:change="checkIfEdited"/>
+        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:change="onWordUpdate"/>
       </div>
 
       <div v-for="(def, i) in editedWord.definition" v-bind:key="'definition' + i" class="word-definition">
-        <div class="definition-pos">
-          <div v-if="!isAddingWord && !isNewDefinition(i)">
-            {{editedWord.definition[i].partOfSpeech}}
-          </div>
-
-          <div v-if="isNewDefinition(i)">
-            <div>Choose a part of Speech</div>
-            <select v-on:change="handlePartOfSpeechChange($event, i)" v-model="editedWord.definition[i].partOfSpeech">
-              <option value="">--</option>
-              <option v-for="(pos, index) in availablePartsOfSpeech" v-bind:value="pos" v-bind:key="pos + '-' + index">
-                {{ pos }}
-              </option>
-            </select>
-          </div>
+        <div v-if="!isAddingWord && !isNewDefinition(i)">
+          {{editedWord.definition[i].partOfSpeech}}
         </div>
+        <div v-if="isNewDefinition(i)">
 
+          <PartOfSpeech
+            v-bind:index="i"
+            v-bind:used="usedPartsOfSpeech"
+            v-on:updated="handlePartOfSpeechChange($event)"
+            />
+            
+        </div>
         
         <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI" class="definition-entries">
           <div class="entry">
-            {{eI + 1}}. <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="checkIfEdited" placeholder="Enter a new entry"/>
+            {{eI + 1}}. <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="onWordUpdate" placeholder="Enter a new entry"/>
           </div>
         </div>
 
@@ -34,7 +30,7 @@
       </div>
 
       <div>
-        <button class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
+        <button v-if="availablePartsOfSpeech.length" class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
       </div>
 
       <div>
@@ -49,6 +45,7 @@
 import api from '../services/api'
 import _ from 'lodash'
 import validate from '../services/validate'
+import PartOfSpeech from './PartOfSpeech'
 
 const cloneInitialWord = (word) => {
       const clonedWord = {
@@ -77,6 +74,9 @@ const cloneInitialWord = (word) => {
 
 export default {
   name: 'Word',
+  components: {
+    PartOfSpeech
+  },
   props: {},
   data() {
     return {
@@ -86,7 +86,15 @@ export default {
       isWordEdited: false,
       editedWord: {},
       isAddingWord: false,
-      availablePartsOfSpeech: ['noun', 'verb', 'adjective', 'adverb', 'preposition'],
+    }
+  },
+  computed: {
+    availablePartsOfSpeech: function() {
+      const partsOfSpeech = ['noun', 'verb', 'adjective', 'adverb', 'preposition'];
+      return _.difference(partsOfSpeech, this.usedPartsOfSpeech);
+    },
+    usedPartsOfSpeech: function() {
+      return this.editedWord.definition.map(def => def.partOfSpeech).filter(def => def !== '')
     }
   },
   async mounted() {
@@ -101,13 +109,8 @@ export default {
     }
     this.isLoading = false;
   },
-  watch: {
-    availablePartsOfSpeech: function (oldVal, newVal) {
-      console.log(oldVal, newVal)
-    }
-  },
   methods: {
-    checkIfEdited() {
+    onWordUpdate() {
       this.isWordEdited = !_.isEqual(this.word, this.editedWord);
     },
     async handleSubmit() {
@@ -135,15 +138,15 @@ export default {
       this.editedWord = cloneInitialWord(word);
       this.isAddingWord = true;
     },
-    handlePartOfSpeechChange(event, index) {
-      const value = event.target.value;
+    handlePartOfSpeechChange(event) {
+      const {value, index} = event;
       this.editedWord.definition[index].partOfSpeech = value;
     },
     addEntry(event, index) {
       this.editedWord.definition[index].entries.push('')
     },
     addPartOfSpeech() {
-      this.editedWord.definition.push({partOfSpeech: '', entries: ['']})
+      this.editedWord.definition.push({partOfSpeech: '', entries: ['']});
     },
     isNewDefinition(index) {
       const initialDef = this.word.definition[index]
@@ -155,7 +158,7 @@ export default {
 
       const editedWordNoEntries = editedDef.entries.filter(entry => entry.trim() !== '');
       if (!editedWordNoEntries.length) return true;
-    }
+    },
   }
     
 }
