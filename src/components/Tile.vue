@@ -13,12 +13,13 @@
           </div>
         </div>
       </div>
-      <button v-on:click="onDelete">Delete</button>
+      <Button v-on:click="onDelete" type="delete"></Button>
     </div>
 </template>
 
 <script>
 import api from '../services/api'
+import Button from './Button'
 
 export default {
   name: 'Tile',
@@ -26,6 +27,9 @@ export default {
       initialWord: {
           type: Object,
       },
+  },
+  components: {
+    Button
   },
   methods: {
     goToPage() {

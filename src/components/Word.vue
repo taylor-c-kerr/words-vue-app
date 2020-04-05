@@ -3,7 +3,7 @@
       <div class="word-name">
         <div v-if="!isAddingWord">{{editedWord.name}}</div>
         <div v-if="isAddingWord">Enter a new word:</div>
-        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:input="onWordUpdate"/>
+        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" @input="onWordUpdate"/>
       </div>
 
       <div v-for="(def, i) in editedWord.definition" v-bind:key="'definition' + i" class="word-definition">
@@ -15,14 +15,14 @@
           <PartOfSpeech
             v-bind:index="i"
             v-bind:used="usedPartsOfSpeech"
-            v-on:updated="handlePartOfSpeechChange($event)"
+            @updated="handlePartOfSpeechChange($event)"
             />
             
         </div>
         
         <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI" class="definition-entries">
           <div class="entry">
-            {{eI + 1}}. <input v-model="editedWord.definition[i].entries[eI]" v-on:input="onWordUpdate" placeholder="Enter a new entry"/>
+            {{eI + 1}}. <input v-model="editedWord.definition[i].entries[eI]" @input="onWordUpdate" placeholder="Enter a new entry"/>
           </div>
         </div>
 
