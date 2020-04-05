@@ -3,7 +3,7 @@
       <div class="word-name">
         <div v-if="!isAddingWord">{{editedWord.name}}</div>
         <div v-if="isAddingWord">Enter a new word:</div>
-        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:change="onWordUpdate"/>
+        <input v-if="isAddingWord" placeholder="Enter a new word..." v-model="editedWord.name" v-on:input="onWordUpdate"/>
       </div>
 
       <div v-for="(def, i) in editedWord.definition" v-bind:key="'definition' + i" class="word-definition">
@@ -22,7 +22,7 @@
         
         <div v-for="(entry, eI) in def.entries" v-bind:key="'definition' + i + 'entry' + eI" class="definition-entries">
           <div class="entry">
-            {{eI + 1}}. <input v-model.lazy="editedWord.definition[i].entries[eI]" v-on:change="onWordUpdate" placeholder="Enter a new entry"/>
+            {{eI + 1}}. <input v-model="editedWord.definition[i].entries[eI]" v-on:input="onWordUpdate" placeholder="Enter a new entry"/>
           </div>
         </div>
 
@@ -128,8 +128,10 @@ export default {
         else {
           await api.updateWord(validatedWord);
         }
+        this.$router.push('/')
       }
       catch (error) {
+        console.error(error)
         alert('There was an error submitting.  Please make sure all fields are filled.')
       }
     },
