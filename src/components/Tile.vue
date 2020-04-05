@@ -13,7 +13,7 @@
           </div>
         </div>
       </div>
-      <Button v-on:click="onDelete" type="delete"></Button>
+      <Button @clicked="onDelete" type="delete"></Button>
     </div>
 </template>
 

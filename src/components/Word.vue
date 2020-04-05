@@ -100,7 +100,7 @@ export default {
       return _.difference(partsOfSpeech, this.usedPartsOfSpeech);
     },
     canAddPos: function() {
-      return this.availablePartsOfSpeech.length && this.editedWord.definition.length === 5;
+      return this.availablePartsOfSpeech.length && this.editedWord.definition.length !== 5;
     }
   },
   async mounted() {

@@ -1,5 +1,10 @@
 <template>
-    <i class="material-icons button">{{value}}</i>
+    <i 
+        class="material-icons button delete"
+        @click="$emit('clicked')"
+    >
+        {{value}}
+    </i>
 </template>
 
 <script>
