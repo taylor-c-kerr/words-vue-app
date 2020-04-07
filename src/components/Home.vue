@@ -1,5 +1,6 @@
 <template>
   <div class="words-container">
+      <LoadingIcon v-if="isLoading" />
       <Tile
         v-for="word in words"
         v-bind:key="word.id"
@@ -11,21 +12,32 @@
 <script>
 import Tile from './Tile'
 import api from '../services/api'
+import LoadingIcon from "./LoadingIcon";
 
 export default {
   name: 'Home',
   props: {},
   components: {
-      Tile
+      Tile,
+      LoadingIcon
   },
   data() {
     return {
       words: [],
+      isLoading: true,
+      isError: false
     }
   },
   async mounted() {
-    const words = await api.getWords();
-    this.words = words.data
+    try {
+      const words = await api.getWords();
+      this.words = words.data
+      this.isLoading = false;
+    }
+    catch (error) {
+      console.error(error);
+      this.isError = true;
+    }
   }
 }
 </script>

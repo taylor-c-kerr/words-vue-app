@@ -1,5 +1,6 @@
 <template>
     <div>
+      <LoadingIcon v-if="isLoading" />
       <div class="word-name">
         <div v-if="!isAddingWord">{{editedWord.name}}</div>
         <div v-if="isAddingWord">Enter a new word:</div>
@@ -45,6 +46,7 @@ import _ from 'lodash'
 import validate from '../services/validate'
 import PartOfSpeech from './PartOfSpeech'
 import Button from './Button'
+import LoadingIcon from './LoadingIcon'
 
 const cloneInitialWord = (word) => {
       const clonedWord = {
@@ -75,7 +77,8 @@ export default {
   name: 'Word',
   components: {
     PartOfSpeech,
-    Button
+    Button,
+    LoadingIcon
   },
   props: {},
   data() {
@@ -104,16 +107,22 @@ export default {
     }
   },
   async mounted() {
-    const id = this.$route.params.id;
-    if (!id) {
-      this.initNewWord();
+    try {
+      const id = this.$route.params.id;
+      if (!id) {
+        this.initNewWord();
+      }
+      else {
+        const word = await api.getWord(id);
+        this.word = word.data;
+        this.editedWord = cloneInitialWord(word.data);
+      }
+      this.isLoading = false;
     }
-    else {
-      const word = await api.getWord(id);
-      this.word = word.data;
-      this.editedWord = cloneInitialWord(word.data);
+    catch(error) {
+      console.error(error);
+      this.error = true;
     }
-    this.isLoading = false;
   },
   methods: {
     onWordUpdate() {
