@@ -26,7 +26,6 @@
           </div>
         </div>
 
-        <!-- <button class="button-add-entry" @click="addEntry($event, i)">New Entry</button> -->
         <Button type="add" class="button-add-entry" text="New Entry" @clicked="addEntry($event, i)"></Button>
       </div>
 
