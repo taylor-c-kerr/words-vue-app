@@ -26,12 +26,11 @@
           </div>
         </div>
 
-        <button class="button-add-entry" @click="addEntry($event, i)">New Entry</button>
+        <!-- <button class="button-add-entry" @click="addEntry($event, i)">New Entry</button> -->
+        <Button type="add" class="button-add-entry" text="New Entry" @clicked="addEntry($event, i)"></Button>
       </div>
 
-      <div>
-        <button v-if="canAddPos" class="button-add-pos" @click="addPartOfSpeech">Add Part of Speech</button>
-      </div>
+        <Button type="add" v-if="canAddPos" text="Part of Speech" @clicked="addPartOfSpeech"></Button>
 
       <div>
         <button class="button-update" v-if="isWordEdited && !isAddingWord" @click="handleSubmit">UPDATE</button>
@@ -46,6 +45,7 @@ import api from '../services/api'
 import _ from 'lodash'
 import validate from '../services/validate'
 import PartOfSpeech from './PartOfSpeech'
+import Button from './Button'
 
 const cloneInitialWord = (word) => {
       const clonedWord = {
@@ -75,7 +75,8 @@ const cloneInitialWord = (word) => {
 export default {
   name: 'Word',
   components: {
-    PartOfSpeech
+    PartOfSpeech,
+    Button
   },
   props: {},
   data() {

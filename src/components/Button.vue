@@ -1,10 +1,9 @@
 <template>
-    <i 
-        class="material-icons button delete"
-        @click="$emit('clicked')"
-    >
-        {{value}}
-    </i>
+  <div class="button">
+    <div @click="$emit('clicked')" class="material-icons icon">{{value}}</div>
+    <div v-if="text !== ''" class="text">{{text}}</div>
+  </div>
+
 </template>
 
 <script>
@@ -13,6 +12,10 @@ export default {
         type: {
             required: true,
             type: String
+        },
+        text: {
+            type: String,
+            default: ''
         }
     },
     computed: {
@@ -21,6 +24,9 @@ export default {
             switch(this.type) {
                 case 'delete':
                     result = 'delete_forever';
+                    break;
+                case 'add':
+                    result = 'add_box_outline';
                     break;
                 default:
                     result = ''
@@ -31,11 +37,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   .button {
-    cursor: pointer;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .icon {
     width: 24px;
-    margin: auto;
+    cursor: pointer;
+  }
+  .text{
+    padding-left: 10px;
   }
 </style>
