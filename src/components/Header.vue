@@ -1,7 +1,5 @@
 <template>
-  <!-- <div> -->
-    <img src="../../public/happy-moose.png" @click="goHome"/>
-  <!-- </div> -->
+  <img src="../../public/happy-moose.png" @click="goHome"/>
 </template>
 
 <script>
