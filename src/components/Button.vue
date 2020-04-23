@@ -8,32 +8,28 @@
 
 <script>
 export default {
-    props: {
-        type: {
-            required: true,
-            type: String
-        },
-        text: {
-            type: String,
-            default: ''
-        }
+  props: {
+    type: {
+      required: true,
+      type: String
     },
-    computed: {
-        value: function() {
-            let result = '';
-            switch(this.type) {
-                case 'delete':
-                    result = 'delete_forever';
-                    break;
-                case 'add':
-                    result = 'add_box_outline';
-                    break;
-                default:
-                    result = ''
-            }
-            return result
-        }
+    text: {
+      type: String,
+      default: ''
     }
+  },
+  computed: {
+    value: function() {
+      switch(this.type) {
+        case 'delete':
+          return 'delete_forever';
+        case 'add':
+          return 'add_box';
+        default:
+          return '';
+      }
+    }
+  }
 }
 </script>
 
@@ -44,7 +40,7 @@ export default {
     justify-content: center;
   }
   .icon {
-    width: 24px;
+    max-width: 24px;
     cursor: pointer;
   }
   .text{
