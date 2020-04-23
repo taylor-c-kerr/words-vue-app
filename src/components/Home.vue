@@ -1,25 +1,30 @@
 <template>
-  <div class="words-container">
+  <div>
       <LoadingIcon v-if="isLoading" />
-      <Tile
-        v-for="word in words"
-        v-bind:key="word.id"
-        v-bind:initialWord="word"
-      />
+      <Button type="add" text="Add New Word" @clicked="goToAddWord"/>
+      <div class="words-container">
+        <Tile
+          v-for="word in words"
+          v-bind:key="word.id"
+          v-bind:initialWord="word"
+        />
+      </div>
   </div>
 </template>
 
 <script>
 import Tile from './Tile'
 import api from '../services/api'
-import LoadingIcon from "./LoadingIcon";
+import LoadingIcon from './LoadingIcon';
+import Button from './Button'
 
 export default {
   name: 'Home',
   props: {},
   components: {
       Tile,
-      LoadingIcon
+      LoadingIcon,
+      Button
   },
   data() {
     return {
@@ -37,6 +42,11 @@ export default {
     catch (error) {
       console.error(error);
       this.isError = true;
+    }
+  },
+  methods: {
+    goToAddWord() {
+      this.$router.push('/word');
     }
   }
 }

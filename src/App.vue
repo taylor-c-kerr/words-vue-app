@@ -3,7 +3,7 @@
     <Header/>
     <div id="nav">
       <router-link to="/">Home</router-link>
-      <router-link to="/word">Add Word</router-link>
+      <!-- <router-link to="/word">Add Word</router-link> -->
     </div>
     <router-view></router-view>
     <Footer />
