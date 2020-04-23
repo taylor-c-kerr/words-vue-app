@@ -2,6 +2,7 @@
   <div>
       <LoadingIcon v-if="isLoading" />
       <Button type="add" text="Add New Word" @clicked="goToAddWord"/>
+      <FilterBar @filter="handleFilter($event)"/>
       <div class="words-container">
         <Tile
           v-for="word in words"
@@ -16,7 +17,8 @@
 import Tile from './Tile'
 import api from '../services/api'
 import LoadingIcon from './LoadingIcon';
-import Button from './Button'
+import Button from './Button';
+import FilterBar from './FilterBar';
 
 export default {
   name: 'Home',
@@ -24,7 +26,8 @@ export default {
   components: {
       Tile,
       LoadingIcon,
-      Button
+      Button,
+      FilterBar,
   },
   data() {
     return {
@@ -47,6 +50,9 @@ export default {
   methods: {
     goToAddWord() {
       this.$router.push('/word');
+    },
+    handleFilter(event) {
+      console.log(event);
     }
   }
 }
