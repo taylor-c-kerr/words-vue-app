@@ -31,15 +31,23 @@ export default {
   },
   data() {
     return {
-      words: [],
+      originalWords: [],
       isLoading: true,
-      isError: false
+      isError: false,
+      filterData: {},
+      filteredWords: []
     }
+  },
+  computed: {
+    words: function() {
+      const hasFilterData = Object.keys(this.filterData).length > 0;
+      return hasFilterData ? this.filteredWords : this.originalWords;
+    },
   },
   async mounted() {
     try {
       const words = await api.getWords();
-      this.words = words.data
+      this.originalWords = words.data
       this.isLoading = false;
     }
     catch (error) {
@@ -52,8 +60,12 @@ export default {
       this.$router.push('/word');
     },
     handleFilter(event) {
-      console.log(event);
-    }
+      this.filterData = event;
+      const filters = Object.keys(this.filterData);
+      this.filteredWords = this.originalWords.filter(word => {
+        return filters.every(filter => word[filter].includes(event[filter]))
+      })
+    },
   }
 }
 </script>
