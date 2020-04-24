@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { pickBy } from 'lodash';
 export default {
   name: 'FilterBar',
   data() {
@@ -32,7 +33,8 @@ export default {
     handleChange(event) {
       const {name, value} = event.target;
       this.data[name] = value;
-      this.$emit('filter', this.data)
+
+      this.$emit('filter', pickBy(this.data))
     }
   }
 }

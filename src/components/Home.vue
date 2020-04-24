@@ -63,7 +63,16 @@ export default {
       this.filterData = event;
       const filters = Object.keys(this.filterData);
       this.filteredWords = this.originalWords.filter(word => {
-        return filters.every(filter => word[filter].includes(event[filter]))
+        return filters.every(filter => {
+          const inputValue = event[filter];   // this is what you are typing in the box
+          const wordValue = word[filter];     // value of the filter key that is provided.  ie "FOX" if filter is "name" {name : "FOX"}
+          const isArray= Array.isArray(wordValue);
+          if (isArray) {
+            return wordValue.some(element => element.includes(inputValue));
+          } else if (typeof wordValue === 'string') {
+            return wordValue.includes(inputValue);
+          }
+        })
       })
     },
   }
