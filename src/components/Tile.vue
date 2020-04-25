@@ -1,7 +1,7 @@
 <template>
     <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
+      <div class="name">{{word.name}}</div>
       <div class="definition">
-        <div class="name">{{word.name}}</div>
         <div v-for="(def, index) in word.definition" :key="word.def + '-' + index">
           <div class="partOfSpeech">{{def.partOfSpeech}}</div>
           <div
@@ -73,11 +73,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    max-height: 144px;
+    min-height: 144px;
 
     .definition {
-      max-height: 144px;
-      min-height: 144px;
       overflow: scroll;
+      margin: 5px 0;
     }
 
     &:hover {
