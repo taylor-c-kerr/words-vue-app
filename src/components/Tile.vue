@@ -2,11 +2,11 @@
     <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
       <div class="definition" v-on:click="goToPage">
         <div class="name">{{word.name}}</div>
-        <div v-for="(def, index) in word.definition" v-bind:key="word.def-index">
+        <div v-for="(def, index) in word.definition" :key="word.def + '-' + index">
           <div class="partOfSpeech">{{def.partOfSpeech}}</div>
           <div
             v-for="(entry, eIndex) in def.entries"
-            v-bind:key="def-index-entry-eIndex"
+            :key="def + '-' + index + '-' + entry + '-' + eIndex"
             class="entry"
           >
             {{eIndex + 1}}. {{entry}}
