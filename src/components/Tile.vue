@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
-      <div class="definition" v-on:click="goToPage">
+      <div class="definition">
         <div class="name">{{word.name}}</div>
         <div v-for="(def, index) in word.definition" :key="word.def + '-' + index">
           <div class="partOfSpeech">{{def.partOfSpeech}}</div>
@@ -13,7 +13,10 @@
           </div>
         </div>
       </div>
-      <Button @clicked="onDelete" type="delete"></Button>
+      <div class="buttons">
+        <Button class="tile-button" @clicked="goToPage" type="edit"></Button>
+        <Button class="tile-button" @clicked="onDelete" type="delete"></Button>
+      </div>
     </div>
 </template>
 
@@ -85,6 +88,23 @@ export default {
       font-size: 30px;
       background: lightgrey;
       border-radius: 15px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      align-self: flex-end;
+
+      .tile-button{
+        margin-right: 5px;
+        &:hover {
+          background: #f0f1f2;
+          border-radius: 5px;
+        }
+        &:last-of-type {
+          margin-right: 10px;
+        }
+      }
     }
   }
 

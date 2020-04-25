@@ -27,6 +27,8 @@ export default {
           return 'add_box';
         case 'clear':
           return 'clear';
+        case 'edit':
+          return 'edit';
         default:
           return '';
       }
