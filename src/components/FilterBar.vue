@@ -2,40 +2,55 @@
   <div class="filter-bar">
     <div class="filter-by">Filter by:</div>
     <div
-    v-for="(option, index) in options"
-    :key="'option-' + index"
+    v-for="(value, key, index) in filters"
+    :key="'value-' + index"
     class="filters"
     >
-      <label>{{option}}</label>
+      <label>{{key}}</label>
       <input
-        :placeholder="[[option]]"
-        :name="[[option]]"
+        :placeholder="[[key]]"
+        :name="[[key]]"
         @input="handleChange($event)"
+        v-model="filters[key]"
       />
     </div>
+    <Button v-if="filters !== {}" type="clear" class="clear-button" @clicked="clearFilters()"/>
   </div>
 </template>
 
 <script>
 import { pickBy } from 'lodash';
+import Button from './Button';
+
 export default {
   name: 'FilterBar',
+  components: {
+    Button,
+  },
   data() {
     return {
-      options: [],
-      data: {}
+      filters: {}
     }
   },
   mounted() {
-    this.options = ['name', 'category'];
+    this.filters = {
+      name: '',
+      category: '',
+    };
   },
   methods: {
     handleChange(event) {
       const {name, value} = event.target;
-      this.data[name] = value;
-
-      this.$emit('filter', pickBy(this.data))
-    }
+      this.filters[name] = value;
+      this.emitEvent();
+    },
+    clearFilters() {
+      this.filters = {name: '', category: ''};
+      this.emitEvent();
+    },
+    emitEvent() {
+      this.$emit('filter', pickBy(this.filters));
+    },
   }
 }
 </script>
@@ -60,6 +75,10 @@ export default {
        &:last-of-type {
          padding-right: 0px
        }
+    }
+    .clear-button {
+      align-self: flex-end;
+      padding-left: 10px
     }
   }
 </style>

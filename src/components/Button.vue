@@ -25,6 +25,8 @@ export default {
           return 'delete_forever';
         case 'add':
           return 'add_box';
+        case 'clear':
+          return 'clear';
         default:
           return '';
       }
