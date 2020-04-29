@@ -29,6 +29,8 @@ export default {
           return 'clear';
         case 'edit':
           return 'edit';
+        case 'undo':
+          return 'undo';
         default:
           return '';
       }

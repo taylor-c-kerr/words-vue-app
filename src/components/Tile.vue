@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="{deleted: isDeleted, tile: !isDeleted}">
+    <div class="tile" :class="{deleted: isDeleted}">
       <div class="name">{{word.name}}</div>
       <div class="definition">
         <div v-for="(def, index) in word.definition" :key="word.def + '-' + index">
@@ -15,7 +15,8 @@
       </div>
       <div class="buttons">
         <Button class="tile-button" @clicked="goToPage" type="edit"></Button>
-        <Button class="tile-button" @clicked="onDelete" type="delete"></Button>
+        <Button v-if="!isDeleted" class="tile-button" @clicked="onDelete" type="delete"></Button>
+        <Button v-if="isDeleted" class="tile-button" @clicked="addBack" type="undo"></Button>
       </div>
     </div>
 </template>
@@ -46,6 +47,15 @@ export default {
         await api.deleteWord(id);
         this.isDeleted = true;
       }
+    },
+    async addBack() {
+      try {
+        await api.addWord(this.word);
+        this.isDeleted = false;
+      }
+      catch(error) {
+        console.error('there was an error adding a word back')
+      }
     }
   },
   data() {
@@ -75,6 +85,14 @@ export default {
     justify-content: space-between;
     max-height: 144px;
     min-height: 144px;
+
+    &.deleted {
+      background: #f78383;
+
+      &:hover {
+        background: #fb4343;
+      }
+    }
 
     .definition {
       overflow: scroll;
@@ -109,12 +127,4 @@ export default {
     }
   }
 
-  .deleted {
-    border: solid;
-    border-color: red;
-    border-radius: 30px;
-    padding: 10px;
-    margin: 10px;
-    background: red;
-  }
 </style>
