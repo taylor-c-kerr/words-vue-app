@@ -73,7 +73,7 @@ export default {
 <style lang="scss">
   .tile {
     border: solid;
-    border-color: black;
+    border-color: #4e4e4e;
     border-radius: 30px;
     padding: 10px;
     margin: 10px;
@@ -86,6 +86,16 @@ export default {
     max-height: 144px;
     min-height: 144px;
 
+    &:hover {
+      background: #a9bacb
+    }
+    
+    .name {
+      font-size: 30px;
+      background: lightgrey;
+      border-radius: 15px;
+    }
+
     &.deleted {
       background: #f78383;
 
@@ -97,16 +107,19 @@ export default {
     .definition {
       overflow: scroll;
       margin: 5px 0;
-    }
 
-    &:hover {
-      background: #a9bacb
-    }
+      .partOfSpeech {
+        font-style: italic;
+        padding-top: 10px;
 
-    .name {
-      font-size: 30px;
-      background: lightgrey;
-      border-radius: 15px;
+        &:first-of-type {
+          padding-top: 0px;
+        }
+      }
+
+      .entry {
+        color: #4e4e4e;
+      }
     }
 
     .buttons {
