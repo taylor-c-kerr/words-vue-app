@@ -1,18 +1,7 @@
 <template>
     <div class="tile" :class="{deleted: isDeleted}">
       <div class="name">{{word.name}}</div>
-      <div class="definition">
-        <div v-for="(def, index) in word.definition" :key="word.def + '-' + index">
-          <div class="partOfSpeech">{{def.partOfSpeech}}</div>
-          <div
-            v-for="(entry, eIndex) in def.entries"
-            :key="def + '-' + index + '-' + entry + '-' + eIndex"
-            class="entry"
-          >
-            {{eIndex + 1}}. {{entry}}
-          </div>
-        </div>
-      </div>
+      <Definition :definition="word.definition" />
       <div class="buttons">
         <Button class="tile-button" @clicked="goToPage" type="edit"></Button>
         <Button v-if="!isDeleted" class="tile-button" @clicked="onDelete" type="delete"></Button>
@@ -24,16 +13,24 @@
 <script>
 import api from '../services/api'
 import Button from './Button'
+import Definition from './Definition'
 
 export default {
   name: 'Tile',
+    components: {
+      Button,
+      Definition
+    },
   props: {
       initialWord: {
           type: Object,
       },
   },
-  components: {
-    Button
+  data() {
+    return {
+      word: {},
+      isDeleted: false,
+    }
   },
   methods: {
     goToPage() {
@@ -56,12 +53,6 @@ export default {
       catch(error) {
         console.error('there was an error adding a word back')
       }
-    }
-  },
-  data() {
-    return {
-      word: {},
-      isDeleted: false,
     }
   },
   mounted() {
@@ -101,24 +92,6 @@ export default {
 
       &:hover {
         background: #fb4343;
-      }
-    }
-
-    .definition {
-      overflow: scroll;
-      margin: 5px 0;
-
-      .partOfSpeech {
-        font-style: italic;
-        padding-top: 10px;
-
-        &:first-of-type {
-          padding-top: 0px;
-        }
-      }
-
-      .entry {
-        color: #4e4e4e;
       }
     }
 
